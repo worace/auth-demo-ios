@@ -7,13 +7,29 @@
 //
 
 #import "AuthDemoAppDelegate.h"
+#import "CredentialStore.h"
+#import "AuthDemoViewController.h"
+#import "CheckInViewController.h"
 
 @implementation AuthDemoAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *rootViewController;
+    if ([[[CredentialStore alloc] init] isLoggedIn]) {
+        rootViewController = [storyBoard instantiateViewControllerWithIdentifier:@"CheckInFlow"];
+    } else {
+        rootViewController = [storyBoard instantiateViewControllerWithIdentifier:@"AuthenticationFlow"];
+    }
+    
+    self.window.rootViewController = rootViewController;
+    [self.window makeKeyAndVisible];
+        
     return YES;
+
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
